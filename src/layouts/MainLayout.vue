@@ -1,6 +1,6 @@
 <template>
   <q-layout class="main-layout row">
-    <div v-if="isShowSidebar" class="col col-sm-4">
+    <div v-if="isShowSidebar" class="col col-md-3">
       <app-sidebar />
     </div>
 
@@ -25,7 +25,7 @@ const { greater } = useBreakpoints({
 })
 
 const isShowSidebar = computed(() => {
-  if (greater('tablet').value) {
+  if (greater('laptop').value) {
     return true
   }
 
@@ -33,6 +33,6 @@ const isShowSidebar = computed(() => {
 })
 
 const isShowContainer = computed(() => {
-  return greater('tablet').value || selectedChat.value
+  return greater('laptop').value || selectedChat.value
 })
 </script>

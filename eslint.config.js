@@ -40,6 +40,7 @@ export default defineConfigWithVueTs(
     rules: {
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
       '@typescript-eslint/unbound-method': ['off'],
+      'vue/multi-word-component-names': ['off'],
     },
   },
   // https://github.com/vuejs/eslint-config-typescript

@@ -1,5 +1,20 @@
 <template>
-  <h1>123</h1>
+  <q-btn class="app-button" unelevated color="primary">
+    {{ label }}
+
+    <q-badge v-if="alwaysVisibleBadge" :color="badgeColor" rounded>
+      {{ badgeText }}
+    </q-badge>
+  </q-btn>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps<{
+  label?: string
+  badgeColor?: string
+  badgeText?: string
+  alwaysVisibleBadge?: boolean
+}>()
+</script>
+
+<style lang="scss" src="./AppButton.scss"></style>

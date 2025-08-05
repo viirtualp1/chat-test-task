@@ -1,0 +1,16 @@
+.app-chat {
+  &__content {
+    max-height: calc(100vh - 74px);
+    padding: 16px;
+    overflow: auto;
+  }
+
+  &__footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    padding-inline: 16px;
+  }
+}
