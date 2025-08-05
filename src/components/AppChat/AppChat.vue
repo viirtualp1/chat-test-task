@@ -1,10 +1,22 @@
 <template>
   <div v-if="chat" class="app-chat">
+    <div class="app-chat__header">
+      <q-btn
+        round
+        color="primary"
+        icon="arrow_back"
+        size="sm"
+        class="app-chat__back"
+        @click="back"
+      />
+
+      {{ chat.from }}
+    </div>
+
     <div class="app-chat__content">
       <q-chat-message
         v-for="(message, idx) in messages"
         :key="idx"
-        :name="chat.from"
         bg-color="primary"
         text-color="white"
         :text="[message.text]"
@@ -27,8 +39,9 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useChatsStoreRefs } from 'stores/chats'
+import { useChatsStore, useChatsStoreRefs } from 'stores/chats'
 
+const { setSelectedChat } = useChatsStore()
 const { chats, selectedChat } = useChatsStoreRefs()
 
 const text = ref('')
@@ -40,6 +53,10 @@ const chat = computed(() => {
 const messages = computed(() => {
   return chat.value?.messages || []
 })
+
+function back() {
+  setSelectedChat(null)
+}
 </script>
 
 <style lang="scss" src="./AppChat.scss"></style>
