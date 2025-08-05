@@ -1,0 +1,14 @@
+.app-header {
+  height: 100vh;
+  box-shadow: 0.5px 0 1px 0 rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 680px) {
+    width: 100%;
+    box-shadow: none;
+  }
+
+  &__filters {
+    display: flex;
+    gap: 12px;
+  }
+}
