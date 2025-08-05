@@ -2,7 +2,12 @@
   <div class="app-header">
     <div class="app-header__filters">
       <q-btn flat style="color: #ff0080" label="Recent" />
-      <q-btn flat style="color: #ff0080" label="New" />
+
+      <div class="app-button">
+        <q-btn flat style="color: #ff0080" label="New"> </q-btn>
+
+        <q-badge color="red" rounded />
+      </div>
     </div>
   </div>
 </template>
