@@ -39,10 +39,11 @@ export const useChatsStore = defineStore('chats', () => {
 
       const existingChat = chats.value[existingChatIndex]
       if (!existingChat) return
+
       existingChat.messages.push({
         text: data.message,
         date: new Date().toISOString(),
-        is_read: false,
+        is_read: selectedChat.value === existingChat.id,
       })
 
       return
