@@ -16,7 +16,7 @@
   }
 
   &__content {
-    max-height: calc(100vh - 74px);
+    max-height: calc(100vh - 130px);
     padding: 16px;
     overflow: auto;
   }
@@ -25,6 +25,7 @@
     position: absolute;
     bottom: 0;
     width: 100%;
+    padding: 10px 0;
     background: #fff;
     border-top: 1px solid #e0e0e0;
     padding-inline: 16px;

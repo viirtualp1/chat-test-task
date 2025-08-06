@@ -2,28 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { ref, watch } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { useWebSocket } from '@vueuse/core'
-
-export interface WSResponse {
-  message?: WSChatMessage
-  notification?: string
-}
-
-export interface WSChatMessage {
-  from: string
-  message: string
-}
-
-export interface FormattedChatMessage {
-  id: string
-  from: string
-  messages: ChatMessage[]
-}
-
-export interface ChatMessage {
-  text: string
-  date: string
-  is_read: boolean
-}
+import type { FormattedChatMessage, WSChatMessage, WSResponse } from 'src/types/chat'
+import { ChatMessageType } from 'src/types/chat'
 
 export const useChatsStore = defineStore('chats', () => {
   const { status, data } = useWebSocket('ws://[::]:8181')
@@ -43,6 +23,7 @@ export const useChatsStore = defineStore('chats', () => {
       existingChat.messages.push({
         text: data.message,
         date: new Date().toISOString(),
+        type: ChatMessageType.INPUT,
         is_read: selectedChat.value === existingChat.id,
       })
 
@@ -56,6 +37,7 @@ export const useChatsStore = defineStore('chats', () => {
         {
           text: data.message,
           date: new Date().toISOString(),
+          type: ChatMessageType.INPUT,
           is_read: false,
         },
       ],

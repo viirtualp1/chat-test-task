@@ -41,6 +41,7 @@ export default defineConfigWithVueTs(
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
       '@typescript-eslint/unbound-method': ['off'],
       'vue/multi-word-component-names': ['off'],
+      '@typescript-eslint/no-floating-promises': ['off'],
     },
   },
   // https://github.com/vuejs/eslint-config-typescript

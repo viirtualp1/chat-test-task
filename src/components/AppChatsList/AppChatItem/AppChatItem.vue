@@ -23,9 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { formatDistance, parseISO } from 'date-fns'
-import { useChatsStoreRefs, type FormattedChatMessage } from 'stores/chats'
+import { useChatsStoreRefs } from 'stores/chats'
+import type { FormattedChatMessage } from 'src/types/chat'
+import { ChatMessageType } from 'src/types/chat'
 
 const props = defineProps<{ chat: FormattedChatMessage }>()
 
@@ -55,7 +57,9 @@ const lastMessage = computed(() => {
 })
 
 const unreadMessagesCount = computed(() => {
-  return props.chat.messages.filter((message) => !message.is_read).length
+  return props.chat.messages.filter(
+    (message) => !message.is_read && message.type !== ChatMessageType.OUTPUT,
+  ).length
 })
 
 const isChatSelected = computed(() => {

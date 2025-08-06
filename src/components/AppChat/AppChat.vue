@@ -13,24 +13,33 @@
       {{ chat.from }}
     </div>
 
-    <div class="app-chat__content">
+    <div ref="chatContentRef" class="app-chat__content">
       <q-chat-message
         v-for="(message, idx) in messages"
         :key="idx"
         bg-color="primary"
         text-color="white"
+        :sent="message.type === ChatMessageType.OUTPUT"
+        :stamp="parseMessageDate(message.date)"
         :text="[message.text]"
       />
     </div>
 
     <div class="app-chat__footer">
-      <q-input class="app-chat__input" v-model="text" label="Введите сообщение">
-        <template v-slot:before>
+      <q-input
+        v-model="text"
+        label="Введите сообщение"
+        name="Message"
+        outlined
+        rounded
+        @keydown.enter="sendMessage"
+      >
+        <template v-slot:prepend>
           <q-avatar color="primary" text-color="white"> Я </q-avatar>
         </template>
 
-        <template v-slot:after>
-          <q-btn round dense flat icon="send" />
+        <template v-slot:append>
+          <q-btn round dense flat icon="send" @click="sendMessage" />
         </template>
       </q-input>
     </div>
@@ -38,12 +47,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
+import { format, parseISO } from 'date-fns'
 import { useChatsStore, useChatsStoreRefs } from 'stores/chats'
+import { ChatMessageType } from 'src/types/chat'
 
 const { setSelectedChat } = useChatsStore()
 const { chats, selectedChat } = useChatsStoreRefs()
 
+const chatContentRef = ref<HTMLDivElement>()
 const text = ref('')
 
 const chat = computed(() => {
@@ -54,8 +66,36 @@ const messages = computed(() => {
   return chat.value?.messages || []
 })
 
+function parseMessageDate(date: string): string {
+  return format(parseISO(date), 'dd.MM.yyyy HH:mm')
+}
+
 function back() {
   setSelectedChat(null)
+}
+
+function scrollToLastMessage() {
+  if (!chatContentRef.value) return
+
+  const el = chatContentRef.value
+
+  nextTick(() => {
+    requestAnimationFrame(() => {
+      el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+    })
+  })
+}
+
+function sendMessage() {
+  chat.value?.messages.push({
+    text: text.value,
+    type: ChatMessageType.OUTPUT,
+    date: new Date().toISOString(),
+    is_read: false,
+  })
+
+  text.value = ''
+  scrollToLastMessage()
 }
 </script>
 
