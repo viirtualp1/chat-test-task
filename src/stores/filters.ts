@@ -14,7 +14,7 @@ export const FilterSchema = z.object({
 
 export type Filter = z.infer<typeof FilterSchema>
 
-const useFiltersStore = defineStore('filters', () => {
+export const useFiltersStore = defineStore('filters', () => {
   const filters = ref<Filter>({
     search: '',
     sort: SortFilterType.RECENT,
