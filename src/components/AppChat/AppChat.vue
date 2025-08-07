@@ -14,15 +14,7 @@
     </div>
 
     <div ref="chatContentRef" class="app-chat__content">
-      <q-chat-message
-        v-for="(message, idx) in messages"
-        :key="idx"
-        bg-color="primary"
-        text-color="white"
-        :sent="message.type === ChatMessageType.OUTPUT"
-        :stamp="parseMessageDate(message.date)"
-        :text="[message.text]"
-      />
+      <app-chat-message v-for="(message, idx) in messages" :key="idx" :message="message" />
     </div>
 
     <div class="app-chat__footer">
@@ -48,9 +40,9 @@
 
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue'
-import { format, parseISO } from 'date-fns'
 import { useChatsStore, useChatsStoreRefs } from 'stores/chats'
 import { ChatMessageType } from 'src/types/chat'
+import { AppChatMessage } from './AppChatMessage'
 
 const { setSelectedChat } = useChatsStore()
 const { chats, selectedChat } = useChatsStoreRefs()
@@ -65,10 +57,6 @@ const chat = computed(() => {
 const messages = computed(() => {
   return chat.value?.messages || []
 })
-
-function parseMessageDate(date: string): string {
-  return format(parseISO(date), 'dd.MM.yyyy HH:mm')
-}
 
 function back() {
   setSelectedChat('')

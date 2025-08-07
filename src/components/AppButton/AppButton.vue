@@ -1,5 +1,5 @@
 <template>
-  <q-btn class="app-button" unelevated color="primary">
+  <q-btn class="app-button" unelevated rounded color="primary">
     {{ label }}
 
     <q-badge v-if="alwaysVisibleBadge" :color="badgeColor" rounded>

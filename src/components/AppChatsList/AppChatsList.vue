@@ -10,12 +10,12 @@
       There are no new chats
 
       <template v-slot:action>
-        <q-btn flat color="white" label="Go to all chats" @click="setRecentFilter" />
+        <q-btn flat color="white" rounded label="Go to all chats" @click="setRecentFilter" />
       </template>
     </q-banner>
 
     <template v-for="(chat, idx) in filteredChats" :key="chat.from">
-      <app-chat-item :chat="chat" @select:chat="onChatSelected" />
+      <app-chats-list-item :chat="chat" @select:chat="onChatSelected" />
       <q-separator v-if="idx !== filteredChats.length - 1" spaced />
     </template>
   </q-list>
@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { useChatsStoreRefs, useChatsStore } from 'stores/chats'
 import { useChatsFilters } from 'src/composables/useChatsFilters'
-import { AppChatItem } from './AppChatItem'
+import { AppChatsListItem } from './AppChatsListItem'
 import { SortFilterType, useFiltersStoreRefs } from 'stores/filters'
 
 const { setSelectedChat } = useChatsStore()

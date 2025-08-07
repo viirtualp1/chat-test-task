@@ -1,7 +1,15 @@
 <template>
   <div class="app-sidebar">
     <div class="app-sidebar__filters">
-      <q-input v-model="filters.search" dense outlined label="Search" clearable debounce="100">
+      <q-input
+        v-model="filters.search"
+        dense
+        outlined
+        rounded
+        label="Search"
+        clearable
+        debounce="100"
+      >
         <template v-slot:append>
           <q-icon name="search" />
         </template>

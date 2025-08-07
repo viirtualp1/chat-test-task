@@ -4,7 +4,7 @@
       <q-avatar color="primary" text-color="white"> {{ chat.from[0] }} </q-avatar>
     </q-item-section>
 
-    <q-item-section class="app-chat-item__chat-author">
+    <q-item-section class="app-chat-list-item__chat-author">
       <q-item-label>
         {{ chat.from }}
       </q-item-label>
@@ -14,7 +14,7 @@
     </q-item-section>
 
     <q-item-section v-if="lastMessage" side>
-      <q-item-label caption class="app-chat-item__date">{{ lastMessage.date }}</q-item-label>
+      <q-item-label caption class="app-chat-list-item__date">{{ lastMessage.date }}</q-item-label>
       <q-badge v-if="unreadMessagesCount > 0" color="red" rounded>
         {{ unreadMessagesCount }}
       </q-badge>
@@ -83,4 +83,4 @@ onUnmounted(() => {
 })
 </script>
 
-<style lang="scss" src="./AppChatItem.scss"></style>
+<style lang="scss" src="./AppChatsListItem.scss"></style>
