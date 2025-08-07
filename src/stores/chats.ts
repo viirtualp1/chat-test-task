@@ -12,7 +12,7 @@ const WSChatMessageSchema = z.object({
 
 const WSResponseSchema = z.object({
   message: WSChatMessageSchema.optional(),
-  notification: z.string().optional(),
+  notification: z.any().optional(),
 })
 
 function formatMessage(text: string, type: ChatMessageType, is_read: boolean) {
