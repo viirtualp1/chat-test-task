@@ -59,7 +59,7 @@ const chatContentRef = ref<HTMLDivElement>()
 const text = ref('')
 
 const chat = computed(() => {
-  return chats.value.find((chat) => chat.id === selectedChat.value)
+  return chats.value.get(selectedChat.value)
 })
 
 const messages = computed(() => {
@@ -71,7 +71,7 @@ function parseMessageDate(date: string): string {
 }
 
 function back() {
-  setSelectedChat(null)
+  setSelectedChat('')
 }
 
 function scrollToLastMessage() {

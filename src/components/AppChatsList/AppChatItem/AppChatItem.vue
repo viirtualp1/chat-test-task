@@ -63,7 +63,7 @@ const unreadMessagesCount = computed(() => {
 })
 
 const isChatSelected = computed(() => {
-  return props.chat.id === selectedChat.value
+  return props.chat.from === selectedChat.value
 })
 
 function resetDate() {
@@ -71,7 +71,7 @@ function resetDate() {
 }
 
 function setChat() {
-  emit('select:chat', props.chat.id)
+  emit('select:chat', props.chat.from)
 }
 
 onMounted(() => {

@@ -1,74 +1,82 @@
-import { v4 as uuidv4 } from 'uuid'
-import { ref, watch } from 'vue'
+import { ref, watch, computed, readonly } from 'vue'
+import { z } from 'zod'
 import { defineStore, storeToRefs } from 'pinia'
 import { useWebSocket } from '@vueuse/core'
-import type { FormattedChatMessage, WSChatMessage, WSResponse } from 'src/types/chat'
+import type { FormattedChatMessage, WSChatMessage } from 'src/types/chat'
 import { ChatMessageType } from 'src/types/chat'
 
-export const useChatsStore = defineStore('chats', () => {
-  const { status, data } = useWebSocket('ws://[::]:8181')
+const WSChatMessageSchema = z.object({
+  from: z.string(),
+  message: z.string(),
+})
 
-  const chats = ref<FormattedChatMessage[]>([])
-  const selectedChat = ref<string | null>(null)
+const WSResponseSchema = z.object({
+  message: WSChatMessageSchema.optional(),
+  notification: z.string().optional(),
+})
+
+function formatMessage(text: string, type: ChatMessageType, is_read: boolean) {
+  return {
+    text,
+    date: new Date().toISOString(),
+    type,
+    is_read,
+  }
+}
+
+export const useChatsStore = defineStore('chats', () => {
+  const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8181'
+  const { status, data } = useWebSocket(wsUrl)
+
+  const chats = ref(new Map<string, FormattedChatMessage>())
+  const selectedChat = ref<string>('')
+
+  const chatsList = computed(() => Array.from(chats.value.values()))
 
   const handleNewMessage = (data: WSChatMessage) => {
-    const isChatExists = chats.value.some((chat) => chat.from === data.from)
+    const chat = chats.value.get(data.from)
 
-    if (isChatExists) {
-      const existingChatIndex = chats.value.findIndex((chat) => chat.from === data.from)
+    if (chat) {
+      chat.messages.push(
+        formatMessage(data.message, ChatMessageType.INPUT, selectedChat.value === chat.from),
+      )
+    } else {
+      const newChat: FormattedChatMessage = {
+        from: data.from,
+        messages: [formatMessage(data.message, ChatMessageType.INPUT, false)],
+      }
 
-      const existingChat = chats.value[existingChatIndex]
-      if (!existingChat) return
-
-      existingChat.messages.push({
-        text: data.message,
-        date: new Date().toISOString(),
-        type: ChatMessageType.INPUT,
-        is_read: selectedChat.value === existingChat.id,
-      })
-
-      return
+      chats.value.set(data.from, newChat)
     }
-
-    chats.value.push({
-      id: uuidv4(),
-      from: data.from,
-      messages: [
-        {
-          text: data.message,
-          date: new Date().toISOString(),
-          type: ChatMessageType.INPUT,
-          is_read: false,
-        },
-      ],
-    })
   }
 
-  function setSelectedChat(chatId: string | null) {
-    selectedChat.value = chatId
+  function setSelectedChat(from: string) {
+    selectedChat.value = from
   }
 
   watch(data, (newData) => {
     if (!newData) return
 
     try {
-      const parsedData = JSON.parse(newData as string) as WSResponse
+      const parsedData = JSON.parse(newData as string)
+      const validatedData = WSResponseSchema.parse(parsedData)
 
-      if (parsedData.message) {
-        handleNewMessage(parsedData.message)
-      } else if (parsedData.notification) {
-        console.log('Notification received:', parsedData.notification)
+      if (validatedData.message) {
+        handleNewMessage(validatedData.message)
+      } else if (validatedData.notification) {
+        console.log('Notification received:', validatedData.notification)
       }
     } catch (err) {
-      console.error('Failed to parse WebSocket message:', err)
+      console.error('Failed to parse or validate WebSocket message:', err)
     }
   })
 
   return {
-    selectedChat,
+    selectedChat: readonly(selectedChat),
     status,
     data,
     chats,
+    chatsList,
     setSelectedChat,
   }
 })

@@ -23,7 +23,6 @@ export interface ChatMessage {
 }
 
 export interface FormattedChatMessage {
-  id: string
   from: string
   messages: ChatMessage[]
 }
