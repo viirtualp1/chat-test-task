@@ -1,6 +1,4 @@
-# ChatTestTask (chat-test-task)
-
-Chat app for test task
+# Simple chat
 
 ## Install the dependencies
 
